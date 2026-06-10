@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Debit Alert</title>
+</head>
+<body style="margin:0; padding:0; background-color:#f3f6fb; font-family:Arial, Helvetica, sans-serif; color:#1f2937;">
+
+<table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f3f6fb; padding:30px 0;">
+    <tr>
+        <td align="center">
+
+            <table width="600" cellpadding="0" cellspacing="0" style="background-color:#ffffff; border-radius:18px; overflow:hidden; box-shadow:0 12px 35px rgba(15,23,42,0.12);">
+
+                <tr>
+                    <td style="background:#16a34a; padding:34px 30px; text-align:center;">
+                        <div style="font-size:32px; font-weight:700; color:#ffffff; letter-spacing:1px;" th:text="${bankName}">
+                            DIGI BANK
+                        </div>
+                        <div style="margin-top:8px; color:#fee2e2; font-size:15px;">
+                            Debit Transaction Notification
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="padding:36px 34px;">
+
+                        <h1 style="margin:0 0 18px; font-size:26px; color:#111827; font-weight:700;">
+                            Debit Alert
+                        </h1>
+
+                        <p style="margin:0 0 22px; font-size:16px; color:#4b5563;">
+                            Dear <span th:text="${name}">Customer</span>,
+                        </p>
+
+                        <p style="margin:0 0 22px; font-size:15px; line-height:1.7; color:#4b5563;">
+                            Your account has been debited with the following amount:
+                        </p>
+
+                        <table width="100%" cellpadding="0" cellspacing="0" style="background:#fff7ed; border:1px solid #16a34a; border-radius:16px; margin:26px 0;">
+                            <tr>
+                                <td style="padding:28px; text-align:center;">
+                                    <div style="font-size:28px;">💳</div>
+                                    <div style="font-size:13px; color:#16a34a; margin-top:10px; margin-bottom:8px; font-weight:600;">
+                                        Amount Debited
+                                    </div>
+                                    <div style="font-size:34px; font-weight:700; color:#16a34a;"
+                                         th:text="${currency} + ' ' + ${amount}">
+                                        $ 1,000.00
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e5e7eb; border-radius:14px; overflow:hidden; margin:24px 0;">
+                            <tr>
+                                <td colspan="2" style="background:#f8fafc; padding:16px 20px; font-weight:700; color:#111827;">
+                                    Transaction Details
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:14px 20px; color:#6b7280; font-size:14px; border-top:1px solid #e5e7eb;">Reference</td>
+                                <td style="padding:14px 20px; color:#111827; font-size:14px; border-top:1px solid #e5e7eb; text-align:right;" th:text="${reference}">TXN123456</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:14px 20px; color:#6b7280; font-size:14px; border-top:1px solid #e5e7eb;">Account</td>
+                                <td style="padding:14px 20px; color:#111827; font-size:14px; border-top:1px solid #e5e7eb; text-align:right;" th:text="${accountNumber}">0012345</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:14px 20px; color:#6b7280; font-size:14px; border-top:1px solid #e5e7eb;">Description</td>
+                                <td style="padding:14px 20px; color:#111827; font-size:14px; border-top:1px solid #e5e7eb; text-align:right;" th:text="${description}">Transfer</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:14px 20px; color:#6b7280; font-size:14px; border-top:1px solid #e5e7eb;">Date</td>
+                                <td style="padding:14px 20px; color:#111827; font-size:14px; border-top:1px solid #e5e7eb; text-align:right;" th:text="${date}">2026-01-15</td>
+                            </tr>
+                        </table>
+
+                        <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8fafc; border:1px solid #e5e7eb; border-radius:12px; margin-top:20px;">
+                            <tr>
+                                <td style="padding:20px; text-align:center;">
+                                    <div style="font-size:13px; color:#64748b;">
+                                        Available Balance
+                                    </div>
+                                    <div style="font-size:28px; font-weight:700; color:#0f172a; margin-top:8px;"
+                                         th:text="${balance}">
+                                        $ 10,000.00
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <div style="background:#fff7ed; border-left:4px solid #16a34a; padding:18px; border-radius:12px; margin-top:25px;">
+                            <p style="margin:0; color:#16a34a; font-size:14px; line-height:1.6;">
+                                <strong>⚠ Security Notice</strong><br>
+                                If you do not recognize this transaction, please contact our customer support immediately.
+                            </p>
+                        </div>
+
+                        <p style="margin:28px 0 0; font-size:15px; color:#4b5563; line-height:1.7;">
+                            Thank you for banking with us.
+                        </p>
+
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="background:#f8fafc; padding:24px 30px; text-align:center; border-top:1px solid #e5e7eb;">
+                        <p style="margin:0 0 8px; color:#6b7280; font-size:13px;">
+                            © 2026 Digi Bank. All rights reserved.
+                        </p>
+                        <p style="margin:0; color:#9ca3af; font-size:12px;">
+                            Please do not reply to this automated email.
+                        </p>
+                    </td>
+                </tr>
+
+            </table>
+
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>
