@@ -65,6 +65,8 @@ public class EmailServiceImpl implements EmailService {
                     .build();
 
             notificationRepository.save(notificationToSave);
+
+            throw new RuntimeException(e.getMessage());
         }
     }
 
