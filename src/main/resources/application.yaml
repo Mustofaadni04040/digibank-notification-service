@@ -24,6 +24,17 @@ spring:
         spring.json.type.mapping: >
           com.example.useraccountservice.kafka.dto.UserRegistrationEvent:
           com.example.notificationservice.kafka.dto.UserRegistrationEvent
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
 eureka:
   client:
