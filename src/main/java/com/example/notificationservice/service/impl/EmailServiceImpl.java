@@ -3,6 +3,8 @@ package com.example.notificationservice.service.impl;
 import com.example.notificationservice.entity.Notification;
 import com.example.notificationservice.enums.NotificationStatus;
 import com.example.notificationservice.enums.NotificationType;
+import com.example.notificationservice.enums.transaction.TransactionDirection;
+import com.example.notificationservice.kafka.dto.BalanceUpdateEvent;
 import com.example.notificationservice.kafka.dto.UserRegistrationEvent;
 import com.example.notificationservice.repository.NotificationRepository;
 import com.example.notificationservice.service.EmailService;
@@ -16,6 +18,8 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -71,16 +75,62 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendCreditAlert() {
+    public void sendTransactionAlertEmail(BalanceUpdateEvent event) {
 
+        try {
+
+            Context context = new Context();
+            context.setVariable("name", event.getFirstName());
+            context.setVariable("bankName", "DIGI BANK");
+            context.setVariable("amount", event.getAmount());
+            context.setVariable("currency", "USD");
+            context.setVariable("reference", event.getReference());
+            context.setVariable("accountNumber", event.getAccountNumber());
+            context.setVariable("description", event.getDescription() != null ? event.getDescription() : "Bank Transaction");
+            context.setVariable("date", LocalDateTime.now().toString());
+            context.setVariable("balance", event.getCurrentBalance());
+
+            String templateName;
+            String subject;
+
+            if (TransactionDirection.CREDIT.equals(event.getTransactionDirection())) {
+                templateName = "credit-alert";
+                subject = "Credit Alert: [" + event.getReference() + "]";
+            } else {
+                templateName = "debit-alert";
+                subject = "Debit Alert: [" + event.getReference() + "]";
+            }
+            String htmlEmailTemplate = templateEngine.process(templateName, context);
+
+            Notification notificationToSave = Notification.builder()
+                    .recipientEmail(event.getEmail())
+                    .type(NotificationType.EMAIL)
+                    .subject(subject)
+                    .message(htmlEmailTemplate)
+                    .status(NotificationStatus.SENT)
+                    .build();
+
+            sendEmailOut(event.getEmail(), subject, htmlEmailTemplate);
+
+            notificationRepository.save(notificationToSave);
+            log.info("Email was sent out successfully to {}", event.getEmail());
+
+        } catch (Exception e) {
+            log.info("Error sending email out {}", event.getEmail());
+
+            Notification notificationToSave = Notification.builder()
+                    .recipientEmail(event.getEmail())
+                    .type(NotificationType.EMAIL)
+                    .subject("Transaction alert error")
+                    .message("Transaction alert error with this ref: {}" + event.getReference())
+                    .status(NotificationStatus.FAILED)
+                    .build();
+
+            notificationRepository.save(notificationToSave);
+
+            throw new RuntimeException(e);
+        }
     }
-
-    @Override
-    public void sendDebitAlert() {
-
-    }
-
-
 
     private void sendEmailOut(String recipientEmail, String subject, String emailTemplate) throws MessagingException {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
