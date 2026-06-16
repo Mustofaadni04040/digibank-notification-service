@@ -1,5 +1,6 @@
 package com.example.notificationservice.kafka.service;
 
+import com.example.notificationservice.kafka.dto.BalanceUpdateEvent;
 import com.example.notificationservice.kafka.dto.UserRegistrationEvent;
 import com.example.notificationservice.service.EmailService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,17 @@ public class NotificationConsumerListener {
 
         try {
             emailService.sendWelcomeAlert(event);
+        } catch (Exception e) {
+            log.error("Error sending email out: {}", e.getMessage());
+        }
+    }
+
+    @KafkaListener(topics = "balance-update-notification-events", groupId = "notification-group")
+    public void consumerBalanceUpdateEvent(BalanceUpdateEvent event) {
+        log.info("Received balance update event");
+
+        try {
+            emailService.sendTransactionAlertEmail(event);
         } catch (Exception e) {
             log.error("Error sending email out: {}", e.getMessage());
         }
